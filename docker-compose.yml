@@ -1,0 +1,42 @@
+version: "3"
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - /opt/app/node_modules
+    networks:
+      - frontend_network
+    restart: always
+  mysql:
+    image: mysql
+    container_name: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass
+    networks:
+      - backend_network
+    restart: always
+  backend:
+    build: ./app
+    volumes:
+      - /opt/app/node_modules
+    networks:
+      - backend_network
+      - frontend_network
+    depends_on:
+      - mysql
+    restart: always
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend_network
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+networks:
+  backend_network:
+    driver: bridge
+  frontend_network:
+    driver: bridge
