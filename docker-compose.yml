@@ -2,8 +2,6 @@ version: "3"
 services:
   frontend:
     build: ./frontend
-    volumes:
-      - /opt/app/node_modules
     networks:
       - frontend_network
     restart: always
@@ -17,8 +15,6 @@ services:
     restart: always
   backend:
     build: ./app
-    volumes:
-      - /opt/app/node_modules
     networks:
       - backend_network
       - frontend_network
